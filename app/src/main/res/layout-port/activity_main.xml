@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/Parentlayout"
+    >
+
+
+    <VideoView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/webview"/>
+
+    <RelativeLayout
+        android:layout_width="120dp"
+        android:layout_height="100dp"
+        android:id="@+id/volumeLayout"
+        android:layout_centerInParent="true"
+        android:background="#a4a4a4"
+        android:visibility="gone">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/volumePicture"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/volume_high"/>
+        <SeekBar
+            android:id="@+id/volumeSeekbar"
+            android:layout_width="300dp"
+            android:max="15"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/volumePicture"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/volumeSeekbar"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/volumeText"/>
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="120dp"
+        android:layout_height="100dp"
+        android:id="@+id/brightnessLayout"
+        android:layout_centerInParent="true"
+        android:background="#a4a4a4"
+        android:visibility="gone">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/BrightnessPicture"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/brightness"/>
+        <SeekBar
+            android:id="@+id/BrightnessSeekbar"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/BrightnessPicture"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/BrightnessSeekbar"
+            android:id="@+id/brightnessText"
+            android:layout_centerHorizontal="true"/>
+    </RelativeLayout>
+
+</RelativeLayout>
