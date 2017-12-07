@@ -23,7 +23,7 @@ import android.widget.VideoView;
 
 import org.w3c.dom.Text;
 
-public class MainActivity extends AppCompatActivity implements GestureDetector.OnGestureListener,View.OnTouchListener{
+public class MainActivity extends AppCompatActivity implements GestureDetector.OnGestureListener{
 
     private final static int VOLUME = 1;
     private final static int BRIGHTNESS = 2;
@@ -148,38 +148,48 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
             Log.d("x",String.valueOf(start_X));
             if(start_X <= 0.5*screenWidth){
                 GESTURE_FLAG = BRIGHTNESS;
-                //显示声音亮度
+                //显示亮度调节
                 brightnessLayout.setVisibility(View.VISIBLE);
                 volumeLayout.setVisibility(View.GONE);
             }
             else{
                 GESTURE_FLAG = VOLUME;
-                //显示声音亮度
+                //显示声音调节
                 brightnessLayout.setVisibility(View.GONE);
                 volumeLayout.setVisibility(View.VISIBLE);
             }
         }
         if(GESTURE_FLAG == VOLUME){
+            //声音
             currentVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+            //volChange 变化音量
             float volChange;
             if(distanceY >0)
                 volChange = (distanceY * 1.1f /screenHeight) * maxVolume;
             else
                 volChange = (distanceY * 0.05f /screenHeight) * maxVolume;
+
             int volume = (int)Math.min(Math.max(volChange  + currentVolume,0),maxVolume);
             if(volChange != 0){
                 isMute = false;
                 volumeUpdate(volume,isMute);
             }
+            else{
+                isMute = true;
+                volumeUpdate(volume,isMute);
+            }
         }
         else if(GESTURE_FLAG  == BRIGHTNESS){
+            //防止轻微滑动导致亮度改变
             final double DISTANCE = 0.5;
             if(distanceY > DISTANCE)
+                //控制触摸时变化速率
                 brightnessUpdate(3);
             else
                 brightnessUpdate(-3);
 
         }
+        //完成滑动
         isFirstScroll = false;
         return false;
     }
@@ -193,19 +203,19 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         return false;
     }
 
-    @Override
-    public boolean onTouch(View view, MotionEvent motionEvent) {
-        return false;
-    }
+
 
     protected void brightnessUpdate(float brightness) {
         WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
+        //获取屏幕亮度 范围为0.1~1
         layoutParams.screenBrightness = layoutParams.screenBrightness + brightness/255.0f;
         if(layoutParams.screenBrightness > 1)
             layoutParams.screenBrightness = 1;
         else if(layoutParams.screenBrightness < 0.1)
             layoutParams.screenBrightness = (float)0.1;
+        //设置亮度
         getWindow().setAttributes(layoutParams);
+        //Seekbar以及TextView的函数映射
         brightnessSeekbar.setProgress((int)((layoutParams.screenBrightness*(double)(1000/9)-(double)(100/9))));
         brightnessText.setText((int)((layoutParams.screenBrightness*(double)(1000/9)-(double)(100/9))) + "%");
 
@@ -220,8 +230,10 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
             volumeText.setText(0 + "%");
             }
         else {
+            //设置音量
             audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,progress,0);
             currentVolume = progress;
+            //更换音量图片
             if(currentVolume == 0)
                 vlPic.setImageResource(R.drawable.volume_mute);
             else if (currentVolume > 10)
